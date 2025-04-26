@@ -1,0 +1,17 @@
+{
+  "name": "ec",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "pnpm --filter ./client dev",
+    "server": "pnpm --filter ./server dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.8.1",
+  "dependencies": {
+    "typescript": "^5.8.3"
+  }
+}
