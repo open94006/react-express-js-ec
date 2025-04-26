@@ -1,0 +1,7 @@
+# Node.js dependencies
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# IDE and editor settings
+.vscode/
