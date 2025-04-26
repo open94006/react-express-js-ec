@@ -8,7 +8,7 @@ export class ProductService {
   static postProdcut(data: any) {
     console.log(data);
     return {
-      message: 'Post prodcut service!',
+      message: 'Post prodcut service! 7',
     };
   }
 }
