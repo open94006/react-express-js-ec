@@ -15,7 +15,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.get('/api/hello', (_req, res) => {
+app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from Express + TS backend!' });
 });
 

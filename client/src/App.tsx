@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('載入中');
 
+	// 可以看到兩秒鐘後從「載入中」變化成後端回傳的文字
   useEffect(() => {
-    fetch('http://localhost:5100/api/product')
+    setTimeout(() => {
+      fetch('http://localhost:5100/api/hello')
       .then((res) => {
         return res.json()
       })
       .then((data) => {
-        console.log(data);
         return setMessage(data.message)
       });
+    }, 2000);
   }, []);
 
   return (
