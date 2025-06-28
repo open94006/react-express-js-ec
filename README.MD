@@ -90,4 +90,3 @@
 
 - `client/`: 包含 React 前端應用程式。
 - `server/`: 包含 Express.js 後端應用程式。
-- `shared/`: 包含客戶端和伺服器之間共用的程式碼 (例如 TypeScript 介面)。
