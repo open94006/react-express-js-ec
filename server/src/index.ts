@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import productRoute from './routes/product.route';
+import twoFactorRoute from './routes/twoFactor.route';
 
 const app = express();
 const PORT = 5100;
@@ -20,6 +21,7 @@ app.get('/api/hello', (req, res) => {
 });
 
 app.use('/api/product', productRoute);
+app.use('/api/twoFactor', twoFactorRoute);
 
 app.use((err: any, _req: any, res: any, _next: any) => {
   res.status(500).json({ error: err.message || 'Server error' });
