@@ -1,18 +1,16 @@
-import { Fragment, ReactNode, useEffect, useState } from 'react';
-
-type iProduct = {
-  id: number;
-  name: string;
-  salePrice: number;
-  children?: ReactNode;
-};
+import { useEffect, useState } from 'react';
+import { Counter } from './components/Counter';
+import { VerifyTwoFactorToken } from './components/VerifyTwoFactorToken';
+import { Base64Image } from './components/Base64Image';
+import { ProductView } from './components/productList';
+import { iProduct } from './types/product';
 
 function App() {
-  // const [message, setMessage] = useState('載入中');
   const [twoFactorData, setTwoFactorData] = useState({ secret: '', image: '' });
-  const [count, setCount] = useState(0);
+  const [productListResp, setProductListResp] = useState({ data: [] });
+  const [activeTab, setActiveTab] = useState('2fa'); // '2fa', 'counter', 'products'
 
-  // 可以看到兩秒鐘後從「載入中」變化成後端回傳的文字
+  // 二階段驗證資料
   useEffect(() => {
     setTimeout(() => {
       fetch('http://localhost:5100/api/twoFactor')
@@ -25,129 +23,64 @@ function App() {
     }, 2000);
   }, []);
 
-  const ExampleDiv = ({ id, name, salePrice, children }: iProduct) => {
-    return (
-      <Fragment>
-        <h2 onClick={() => console.log(children)}>{name}</h2>
-        <div>
-          {id}, ${salePrice}
-        </div>
-      </Fragment>
-    );
-  };
-
-  const AddButton = () => {
-    return (
-      <button
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        +
-      </button>
-    );
-  };
-
-  const MiunsButton = () => {
-    return (
-      <button
-        onClick={() => {
-          setCount(count - 1);
-        }}
-      >
-        {' '}
-        -
-      </button>
-    );
-  };
-
-  const VerifyTwoFactorToken = () => {
-    const [inputValue, setInputValue] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [result, setResult] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
-
-    const handleSubmit = async () => {
-      setLoading(true);
-      setResult(null);
-      setError(null);
-      try {
-        const res = await fetch('http://localhost:5100/api/twoFactor', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userToken: inputValue,
-            secret: twoFactorData.secret,
-          }),
+  // 取得商品列表
+  useEffect(() => {
+    setTimeout(() => {
+      fetch('http://localhost:5100/api/product/list')
+        .then(res => {
+          return res.json();
+        })
+        .then(resp => {
+          return setProductListResp(resp);
         });
-        const data = await res.json();
-        setResult(data?.message || '驗證完成');
-      } catch (error) {
-        console.error('驗證失敗:', error);
-        setError('驗證失敗，請稍後再試');
-      } finally {
-        setLoading(false);
-      }
-    };
+    }, 2000);
+  }, []);
 
-    return (
-      <Fragment>
-        <input
-          type="text"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          maxLength={6}
-          value={inputValue}
-          onChange={e => setInputValue(e.target.value.replace(/\D/g, ''))}
-          placeholder="請輸入驗證碼"
-          disabled={loading}
-        />
-        <button onClick={handleSubmit} disabled={!inputValue || loading}>
-          {loading ? '送出中...' : '送出'}
-        </button>
-        {result && <div style={{ color: 'green' }}>{result}</div>}
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-      </Fragment>
-    );
-  };
-
-  const Base64Image = ({ data }: { data: { image: string } }) => {
-    console.log(data);
-    if (!data.image) {
-      return <div>載入中</div>;
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case '2fa':
+        return (
+          <>
+            <Base64Image image={twoFactorData.image} />
+            <VerifyTwoFactorToken secret={twoFactorData.secret} />
+          </>
+        );
+      case 'counter':
+        return <Counter />;
+      case 'products':
+        return productListResp.data.length > 0 ? (
+          <>
+            {productListResp.data.map((product: iProduct) => (
+              <ProductView key={product.id} id={product.id} name={product.name} salePrice={product.salePrice}>
+                {111}
+              </ProductView>
+            ))}
+          </>
+        ) : (
+          '載入中...'
+        );
+      default:
+        return null;
     }
-    return (
-      <div>
-        <img src={data.image} alt="Base64 Image" />
-      </div>
-    );
   };
 
-  const productList: iProduct[] = [
-    // { id: 1, name: '牛奶', salePrice: 130 },
-    // { id: 2, name: '白豆漿', salePrice: 50 },
-    // { id: 3, name: '黑豆漿', salePrice: 70 },
-    // { id: 4, name: '汽水', salePrice: 40 },
+  const tabs = [
+    { id: '2fa', label: '2FA 驗證' },
+    { id: 'counter', label: '計數器' },
+    { id: 'products', label: '產品列表' },
   ];
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div style={{ width: '100%' }}>
       <h1>React + Express + TS</h1>
-      {productList.map(product => {
-        const { id, name, salePrice } = product;
-        return (
-          <ExampleDiv id={id} name={name} salePrice={salePrice}>
-            {111}
-          </ExampleDiv>
-        );
-      })}
-      <Base64Image data={twoFactorData} />
-      <VerifyTwoFactorToken />
-      <AddButton />
-      <h2>{count}</h2>
-      <MiunsButton />
+      <div className="tab-nav">
+        {tabs.map(tab => (
+          <button key={tab.id} className={activeTab === tab.id ? 'active' : ''} onClick={() => setActiveTab(tab.id)}>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+      <div className="tab-content">{renderTabContent()}</div>
     </div>
   );
 }

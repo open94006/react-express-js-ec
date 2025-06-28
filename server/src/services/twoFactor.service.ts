@@ -4,7 +4,6 @@ import qrcode from 'qrcode';
 export class TwoFactorService {
   static async getSecretBase64Image() {
     const secret = speakeasy.generateSecret({ name: 'YourAppName' });
-    console.log(secret);
 
     if (!secret.otpauth_url) {
       throw new Error('Failed to generate otpauth_url');
@@ -20,7 +19,6 @@ export class TwoFactorService {
   }
 
   static postUserToken(userToken: string, secret: speakeasy.GeneratedSecret) {
-    console.log(userToken, secret);
     const verified = speakeasy.totp.verify({
       secret: secret.base32,
       encoding: 'base32',

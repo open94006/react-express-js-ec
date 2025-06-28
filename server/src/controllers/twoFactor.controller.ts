@@ -24,4 +24,3 @@ export const postUserTokenController = (req: Request, res: Response, next: NextF
     next(error);
   }
 };
-
