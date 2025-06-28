@@ -3,7 +3,7 @@ import { Counter } from './components/Counter';
 import { VerifyTwoFactorToken } from './components/VerifyTwoFactorToken';
 import { Base64Image } from './components/Base64Image';
 import { ProductView } from './components/productList';
-import { iProduct } from './types/product';
+import { iProduct } from './types/iProduct';
 
 function App() {
   const [twoFactorData, setTwoFactorData] = useState({ secret: '', image: '' });
@@ -51,7 +51,13 @@ function App() {
         return productListResp.data.length > 0 ? (
           <>
             {productListResp.data.map((product: iProduct) => (
-              <ProductView key={product.id} id={product.id} name={product.name} salePrice={product.salePrice}>
+              <ProductView
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                price={product.price}
+                salePrice={product.salePrice}
+              >
                 {111}
               </ProductView>
             ))}

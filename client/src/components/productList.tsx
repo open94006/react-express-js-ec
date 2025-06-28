@@ -1,4 +1,4 @@
-import { iProduct } from '../types/product';
+import { iProduct } from '../types/iProduct';
 
 export const ProductView = ({ id, name, salePrice, children }: iProduct) => {
   return (
