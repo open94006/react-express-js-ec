@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Input, Button } from 'antd';
 
 export const VerifyTwoFactorToken = ({ secret }: { secret: string }) => {
   const [inputValue, setInputValue] = useState('');
@@ -33,20 +34,20 @@ export const VerifyTwoFactorToken = ({ secret }: { secret: string }) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', marginTop: '24px' }}>
-      <input
+      <Input
         type="text"
         inputMode="numeric"
         pattern="[0-9]*"
         maxLength={6}
         value={inputValue}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value.replace(/\D/g, ''))}
+        onChange={(e) => setInputValue(e.target.value.replace(/\D/g, ''))}
         placeholder="請輸入驗證碼"
         disabled={loading}
-        className="w-[200px] text-center"
+        style={{ width: 200, textAlign: 'center' }}
       />
-      <button onClick={handleSubmit} disabled={!inputValue || loading}>
+      <Button onClick={handleSubmit} disabled={!inputValue || loading} style={{ marginTop: 8 }}>
         {loading ? '送出中...' : '送出'}
-      </button>
+      </Button>
       {result && <div style={{ color: 'green' }}>{result}</div>}
       {error && <div style={{ color: 'red' }}>{error}</div>}
     </div>

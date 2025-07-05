@@ -1,7 +1,7 @@
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   text-align: center;
 }
 
@@ -39,4 +39,16 @@
 
 .read-the-docs {
   color: #888;
+}
+/* 新增針對 Ant Design Sider 收合時 ant-layout-sider-children 的過渡動畫 */
+.ant-layout-sider-collapsed .ant-layout-sider-children {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.ant-layout-sider-children {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  opacity: 1;
+  transform: translateX(0);
 }

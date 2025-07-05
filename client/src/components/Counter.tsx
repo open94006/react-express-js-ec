@@ -1,22 +1,23 @@
 import { useState } from 'react';
+import { Button } from 'antd';
 
 export const Counter = () => {
   const [count, setCount] = useState(0);
 
   const AddButton = () => {
     return (
-      <button
+      <Button
         onClick={() => {
           setCount(count + 1);
         }}
       >
         +
-      </button>
+      </Button>
     );
   };
 
   const MiunsButton = () => {
-    return <button onClick={() => setCount(count - 1)}> -</button>;
+    return <Button onClick={() => setCount(count - 1)}> -</Button>;
   };
 
   return (
